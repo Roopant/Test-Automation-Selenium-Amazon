@@ -1,0 +1,76 @@
+package testassignment;
+
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.Assert;
+
+import Pages.CheckOutPage;
+import Pages.SearchProductPage;
+import Pages.SignInPage;
+import testcomponents.BaseTest;
+
+public class AmazonTest extends BaseTest{
+
+	//@Test
+	public void buyProduct() throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		homepage.goToSignInButton();
+		signinpage.signInApplication("rawemotion93@gmail.com","rawemotion@29");
+		Assert.assertTrue(homepage.getSignedInUserName().contains("raw"),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+	
+	//Data Parameterization
+	@Test(dataProvider="getData")
+	public void buyProduct1(HashMap<String,String>input) throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		homepage.goToSignInButton();
+		signinpage.signInApplication(input.get("email"),input.get("password"));
+		Assert.assertTrue(homepage.getSignedInUserName().contains(input.get("userName")),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+	@DataProvider
+	public Object [][] getData() {
+		HashMap<String,String> firstMap = new HashMap<String, String>();
+		firstMap.put("email", "rawemotion93@gmail.com");
+		firstMap.put("password","rawemotion@29" );
+		firstMap.put("userName", "raw");
+		HashMap<String,String> secondmap = new HashMap<String, String>();
+		secondmap.put("email", "roopantkalra@gmail.com");
+		secondmap.put("password","amazon@29" );
+		secondmap.put("userName", "ROOPANT");
+		return new Object[][] {{firstMap},{secondmap}};
+		
+	}
+	
+	public File getScreenshot(String testCaseName) throws IOException {
+		TakesScreenshot ts=(TakesScreenshot)driver ;
+		File source=ts.getScreenshotAs(OutputType.FILE);
+		File file =new File(System.getProperty("user.dir")+"//reports//"+testCaseName+ ".png");
+		FileUtils.copyFile(source, file);
+		return file;
+	}
+
+
+}

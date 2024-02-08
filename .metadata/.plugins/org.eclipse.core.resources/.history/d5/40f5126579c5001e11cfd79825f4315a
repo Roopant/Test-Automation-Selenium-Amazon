@@ -1,0 +1,84 @@
+package testassignment;
+
+
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+import java.io.IOException;
+import java.util.HashMap;
+import org.testng.Assert;
+import Pages.CheckOutPage;
+import Pages.SearchProductPage;
+import Pages.SignInPage;
+import testcomponents.BaseTest;
+import testcomponents.ExcelUtil;
+
+public class AmazonTest extends BaseTest{
+	
+	SignInPage signinpage= new SignInPage(driver);
+	SearchProductPage searchProductPage= new SearchProductPage(driver);
+	CheckOutPage checkOutPage= new CheckOutPage(driver);
+	
+	@DataProvider
+	public Object [] getData() throws IOException {
+		
+		return ExcelUtil.getDataFromExcel();
+		
+	}
+	
+	
+	@Test(priority=1,dataProvider="getData")
+	public void login(HashMap<String,String>input) {
+		homepage.goToSignInButton();
+		signinpage.signInApplication(input.get("email"),input.get("pwd"));
+		
+	}
+	@Test(priority=2,dataProvider="getData")
+	public void validateUserLoggedIn(HashMap<String,String>input) {
+		Assert.assertTrue(homepage.getSignedInUserName().contains(input.get("user")),"Sign In Failed");
+	}
+	@Test(priority=3)
+	public void searchProduct() {
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+	}
+	@Test(priority=4)
+	public void buyNowProduct() {
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+
+	//@Test
+	public void buyProduct() throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		homepage.goToSignInButton();
+		signinpage.signInApplication("rawemotion93@gmail.com","rawemotion@29");
+		Assert.assertTrue(homepage.getSignedInUserName().contains("ra"),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+	
+	}
+	
+	//Data Parameterization
+	@Test(dataProvider="getData")
+	public void buyProduct1(HashMap<String,String>input) throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		homepage.goToSignInButton();
+		signinpage.signInApplication(input.get("email"),input.get("pwd"));
+		Assert.assertTrue(homepage.getSignedInUserName().contains(input.get("user")),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+
+
+}

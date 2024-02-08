@@ -1,0 +1,46 @@
+package testcomponents;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+public class Excel {
+
+	public static void main(String[] args) throws IOException {
+	
+		// TODO Auto-generated method stub
+		FileInputStream file= new FileInputStream("C://Users//roopa//Desktop//AmazonData.xlsx");
+      XSSFWorkbook book= new XSSFWorkbook(file);
+      XSSFSheet sheet= book.getSheet("Sheet1");
+     
+      Iterator<Row> rows= sheet.rowIterator();
+      rows.next();
+      Row secondRow=rows.next();
+    Iterator <Cell> ce= secondRow.cellIterator();
+    
+  Cell firstCell=  ce.next();
+  String email=firstCell.getStringCellValue();
+  Cell SecondCell =ce.next();
+  String pwd= SecondCell.getStringCellValue();
+  Cell thridCell=ce.next();
+  String user= thridCell.getStringCellValue();
+  
+    System.out.println(email+pwd+user);
+    file.close();
+    book.close();
+  
+    }
+    
+      
+        
+     
+	}
+

@@ -1,0 +1,40 @@
+package testassignment;
+
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import Pages.HomePage;
+import Pages.SearchProductLocators;
+import Pages.SignInPageLocators;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class AddToCartTest {
+
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+
+		WebDriverManager.chromedriver().setup();
+		WebDriver driver= new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		
+		HomePage  homepage= new HomePage(driver);
+		SignInPageLocators signinpage= new SignInPageLocators(driver);
+		
+		homepage.goTo();
+		homepage.goToSignInButton();
+		signinpage.signInApplication("rawemotion93@gmail.com","rawemotion@29");
+		homepage.searchProduct("pen");
+		
+		
+		
+		driver.findElement(By.xpath("//span[@class='a-size-base-plus a-color-base a-text-normal']")).click();
+		Thread.sleep(5000);
+		driver.findElement(By.id("submit.add-to-cart-announce")).click();
+		driver.quit();
+	}
+
+}

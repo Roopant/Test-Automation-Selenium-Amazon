@@ -1,0 +1,39 @@
+package testassignment;
+
+
+import org.testng.annotations.Test;
+import java.io.IOException;
+import org.testng.Assert;
+
+import Pages.CheckOutPage;
+import Pages.SearchProductPage;
+import Pages.SignInPage;
+import testcomponents.BaseTest;
+
+public class AmazonTest extends BaseTest{
+
+	@Test
+	public void buyProduct() throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		
+		
+		homepage.goToSignInButton();
+		signinpage.signInApplication("rawemotion93@gmail.com","rawemotion@29");
+	
+		Assert.assertTrue(homepage.getSignedInUserName().contains("raw"),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+	
+	public Object [][] getData() {
+		return new Object[][] {{"rawemotion93@gmail.com","rawemotion@29"},{"roopantkalra@gmail.com","hdjhsd"}};
+		
+	}
+
+
+}

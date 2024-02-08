@@ -1,0 +1,86 @@
+package testassignment;
+
+
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.Assert;
+
+import Pages.CheckOutPage;
+import Pages.SearchProductPage;
+import Pages.SignInPage;
+import lombok.SneakyThrows;
+import testcomponents.BaseTest;
+import testcomponents.Excel;
+
+public class AmazonTest extends BaseTest{
+
+	@Test
+	public void buyProduct() throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		homepage.goToSignInButton();
+		signinpage.signInApplication("rawemotion93@gmail.com","rawemotion@29");
+		Assert.assertTrue(homepage.getSignedInUserName().contains("ra"),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+	
+	public Map<String, String> getData() throws IOException {
+		
+			return Excel.getDataFromExcel();
+		
+			// TODO Auto-generated catch bloc
+		
+	}
+	
+	//Data Parameterization
+	@Test(dataProvider="getData")
+	public void buyProduct1(HashMap<String,String>input) throws InterruptedException, IOException {
+		SignInPage signinpage= new SignInPage(driver);
+		SearchProductPage searchProductPage= new SearchProductPage(driver);
+		CheckOutPage checkOutPage= new CheckOutPage(driver);
+		homepage.goToSignInButton();
+		signinpage.signInApplication(input.get("email"),input.get("pwd"));
+		Assert.assertTrue(homepage.getSignedInUserName().contains(input.get("user")),"Sign In Failed");
+		searchProductPage.searchProduct("ipad pro");
+		searchProductPage.clickSearchedProduct();
+		searchProductPage.buyProduct();
+		Assert.assertTrue(checkOutPage.validateCheckOutPageIsPresent(),"User is not on Checkout Page");
+		
+	}
+//	@DataProvider
+//	public Object [][] getData() {
+//		HashMap<String,String> firstMap = new HashMap<String, String>();
+//		firstMap.put("email", "rawemotion93@gmail.com");
+//		firstMap.put("password","rawemotion@29" );
+//		firstMap.put("userName", "raw");
+//		
+//		HashMap<String,String> secondmap = new HashMap<String, String>();
+//		secondmap.put("email", "roopantkalra@gmail.com");
+//		secondmap.put("password","amazon@29" );
+//		secondmap.put("userName", "ROOPANT");
+//		return new Object[][] {{firstMap},{secondmap}};
+//		
+//	}
+	
+
+
+
+}

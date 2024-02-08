@@ -1,0 +1,58 @@
+package resources;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+
+public class ExtentReportLog {
+
+{
+
+	    public ExtentReports extent;
+	    public ExtentTest test;
+
+	    // Constructor to initialize ExtentReports and ExtentTest
+	    public ExtentReportLog(String reportPath, String testName) {
+	        ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(reportPath);
+	        extent = new ExtentReports();
+	        extent.attachReporter(htmlReporter);
+	        test = extent.createTest(testName);
+	    }
+
+	    // Log information to the report
+	    public void logInfo(String message) {
+	        test.log(Status.INFO, message);
+	    }
+
+	    // Log a pass status to the report
+	    public void logPass(String message) {
+	        test.log(Status.PASS, message);
+	    }
+
+	    // Log a fail status to the report
+	    public void logFail(String message) {
+	        test.log(Status.FAIL, message);
+	    }
+
+	    // Log a warning status to the report
+	    public void logWarning(String message) {
+	        test.log(Status.WARNING, message);
+	    }
+
+	    // Flush the report and close it
+	    public void closeReport() {
+	        extent.flush();
+	    }
+
+	    public static void main(String[] args) {
+	        // Example usage
+	        ExtentReportLog extentReportLog = new ExtentReportLog("extent-report.html", "SampleTest");
+	        extentReportLog.logInfo("This is an informational message");
+	        extentReportLog.logPass("This is a passing message");
+	        extentReportLog.logFail("This is a failing message");
+	        extentReportLog.logWarning("This is a warning message");
+	        extentReportLog.closeReport();
+	    }
+	}
+
+}

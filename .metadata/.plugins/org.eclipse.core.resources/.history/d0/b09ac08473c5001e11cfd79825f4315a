@@ -1,0 +1,29 @@
+package testcomponents;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class Excel {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		FileInputStream file= new FileInputStream("C://Users//roopa//Desktop//AmazonData.xlsx");
+      XSSFWorkbook book= new XSSFWorkbook(file);
+      XSSFSheet sheet= book.getSheet("Sheet1");
+      XSSFRow  row;
+      XSSFCell cell;
+      row=sheet.getRow(0);
+      cell=row.getCell(0);
+      System.out.println("dgjasgjsgds"+cell);
+      
+     
+     
+     
+	}
+
+}
